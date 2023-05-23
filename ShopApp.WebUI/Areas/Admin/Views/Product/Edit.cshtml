@@ -1,0 +1,82 @@
+﻿@model ProductUpdateViewModel
+<h1 class="display-6 mt-2">Ürün Güncelleme</h1>
+<hr />
+
+<form asp-area="Admin"
+      asp-controller="Product"
+      asp-action="Edit"
+      method="post">
+    <div class="row">
+        <div class="col-8">
+            <div class="mb-3">
+                <label class="form-label" asp-for="Name"></label>
+                <input type="text" class="form-control" asp-for="Name">
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label class="form-label" asp-for="Description"></label>
+                <input type="text" class="form-control" asp-for="Description">
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label class="form-label" asp-for="Price"></label>
+                <input class="form-control" asp-for="Price">
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label class="form-label text-danger">Son Güncelleme Tarihi: </label>
+                <label class="form-label">@Model.UpdatedDate.ToShortDateString() @Model.UpdatedDate.ToShortTimeString()</label>
+            </div>
+            <button type="submit" class="btn btn-primary">Değişiklikleri Kaydet</button>
+        </div>
+        <div class="col-4">
+            <h3 class="display-6 fs-6 fw-normal text-danger">Kategoriler</h3>
+            @foreach (var category in Model.Categories)
+            {
+                <div class="mb-1 form-check">
+                    <input type="checkbox" class="form-check-input" name="SelectedCategories" value="@category.Id"
+                       @if(Model.SelectedCategories!=null){
+                       @(Model.SelectedCategories.Any(sc=>sc==category.Id) ? "checked" : "")
+                       }>
+                    <label class="form-check-label">@category.Name</label>
+                </div>
+            }
+            <span asp-validation-for="SelectedCategories" class="text-danger"></span>
+            <hr />
+            <h3 class="display-6 fs-6 fw-normal text-danger">Diğer Seçenekler</h3>
+            <div class="mb-1 form-check">
+                <input type="checkbox" class="form-check-input" asp-for="IsHome">
+                <label class="form-check-label" asp-for="IsHome" style="text-decoration: inherit; color: inherit;"></label>
+            </div>
+            <div class="mb-1 form-check">
+                <input type="checkbox" class="form-check-input" asp-for="IsApproved">
+                <label class="form-check-label" asp-for="IsApproved"></label>
+            </div>
+            <div class="mb-1 form-check">
+                <input type="checkbox" class="form-check-input" asp-for="IsDeleted">
+                <label class="form-check-label" asp-for="IsDeleted"></label>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts{
+    <script>
+        let isHome = document.querySelector("#IsHome");
+        let isApproved = document.querySelector("#IsApproved");
+        isApproved.addEventListener("change", function (e) {
+            if (!e.currentTarget.checked) {
+                isHome.checked = false;
+            }
+        });
+        isHome.addEventListener("change", function(e){
+            if(e.currentTarget.checked){
+                isApproved.checked=true;    
+            }
+        });
+    </script>
+
+}
+
+
+
